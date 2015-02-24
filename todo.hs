@@ -39,14 +39,26 @@
  -
  -
 --}
+type Etime = (Int, Int)
+
+data Etype = Study | Code | Read | Write | Hygiene | Exercise | Class
+             | ClassWork | Food | Zone deriving Show
 
 data Event = Event { desc :: String,
-                     time :: String,
-                     etype :: String
-                   }
+                     etime :: Etime,
+                     etype :: Etype }
 
 main = do
   contents <- readFile "tolog.txt"
   let events = map (parse) (lines contents)
 
 parse :: [Char] -> Event
+parse e@(t1:t2:t3:t4:_) = Event {desc = (getDesc e),
+                             etime = (getEtime (t1 ++ t2 ++ t3 ++ t4)),
+                             etype = (getEtype e)}
+
+getDesc :: [Char] -> String
+
+getEtime :: [Char] -> Etime
+
+getEtype :: [Char] -> Etype
