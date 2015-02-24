@@ -44,10 +44,9 @@ type Etime = (Int, Int)
 data Etype = Study | Code | Read | Write | Hygiene | Exercise | Class
              | ClassWork | Food | Zone deriving Show
 
-data Event = Event { desc :: String,
-                     etime :: Etime,
-                     etype :: Etype }
+data Event = Event { desc :: String, etime :: Etime, etype :: Etype }
 
+main :: IO ()
 main = do
   contents <- readFile "tolog.txt"
   let events = map (parse) (lines contents)
