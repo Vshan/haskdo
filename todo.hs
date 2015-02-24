@@ -47,7 +47,6 @@ data Event = Event { desc :: String,
 
 main = do
   contents <- readFile "tolog.txt"
-  let events = lines contents
-  in map (parse) events
+  let events = map (parse) (lines contents)
 
 parse :: [Char] -> Event
