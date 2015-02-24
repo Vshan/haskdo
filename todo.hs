@@ -51,6 +51,8 @@
   - the goal_of_today part.
 
 --}
+import Control.Applicative
+import Data.Time
 
 type Etime = (Int, Int)
 
@@ -61,12 +63,20 @@ data Event = Event { desc :: String, etime :: Etime, etype :: Etype }
 
 main :: IO ()
 main = do
-  contents <- readFile "tolog.txt"
-  let events = map (parse) (lines contents)
+  logcontents <- readFile "tolog.txt"
+  gtocontents <- readFile "goalday.txt"
+  let events = parse <$> (lines logcontents)
+      goals = lines gtocontents
+  tdate <- getCurrentTime
+  count <- readFile "count.txt"
+  writeFile (count ++ " " ++ tdate ++ ".txt") (gento events goals)
+  writeFile "count.txt" (show ((read count :: Int) + 1))
+
+
 
 parse :: [Char] -> Event
 parse e@(t1:t2:t3:t4:_) = Event {desc = (getDesc e),
-                             etime = (getEtime (t1 ++ t2 ++ t3 ++ t4)),
+                             etime = (getEtime $ t1 ++ t2 ++ t3 ++ t4),
                              etype = (getEtype e)}
 
 getDesc :: [Char] -> String
@@ -90,3 +100,5 @@ getEtype x = case (reverse x) of
                               "b:" -> ClassWork
                               "f:" -> Food
                               "z:" -> Zone
+
+gento :: [a] -> [b] -> String
