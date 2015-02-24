@@ -7,8 +7,8 @@
 -- toweek.txt, totoday.txt, tolog.txt
 
 {--
- - Here's how tolog.txt would look like:
- 0730 got up :z
+ - Here's how tolog.txt would look like (an example day):
+ 0730 chilling :z
  0740 crap :h
  0750 leave for class :e
  0800 class begin :c
@@ -39,6 +39,19 @@
  -
  -
 --}
+
+{-- What's the end goal?
+
+  - Create a program api which takes two (already logged) days
+  - and calculates the cumulative time spent on each task along
+  - with percentage of time spent.
+
+  - Every day the program should generate a final $DAY.txt file
+  - which has the logged activities, time spent + percentage and
+  - the goal_of_today part.
+
+--}
+
 type Etime = (Int, Int)
 
 data Etype = Study | Code | Read | Write | Hygiene | Exercise | Class
