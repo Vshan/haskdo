@@ -55,6 +55,7 @@
   - the goal_of_today part.
 
 --}
+
 import Control.Applicative
 import Data.Time
 
