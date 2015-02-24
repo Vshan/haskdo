@@ -58,7 +58,23 @@ parse e@(t1:t2:t3:t4:_) = Event {desc = (getDesc e),
                              etype = (getEtype e)}
 
 getDesc :: [Char] -> String
+getDesc x = case x of
+              (_:_:_:_:_:d) -> case (reverse d) of
+                                 (_:_:f) -> reverse f
 
 getEtime :: [Char] -> Etime
+getEtime (h1:h2:m1:m2) = (read (h1 ++ h2) :: Int, read (m1 ++ m2) :: Int)
 
 getEtype :: [Char] -> Etype
+getEtype x = case (reverse x) of
+               (x1:x2:_) -> case (x1 ++ x2) of
+                              "s:" -> Study
+                              "c:" -> Code
+                              "r:" -> Read
+                              "w:" -> Write
+                              "h:" -> Hygiene
+                              "e:" -> Exercise
+                              "g:" -> Class
+                              "b:" -> ClassWork
+                              "f:" -> Food
+                              "z:" -> Zone
