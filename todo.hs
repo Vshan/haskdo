@@ -20,24 +20,28 @@
  0200 sleep
 --}
 
+{-- Here's how the functionality works:
 
-{--
- - Here's how totoday.txt would look like:
- -
- -
- -
- -
- -
---}
+  - The user logs his entire day in Google Keep on his phone.
+  - The user also has a goal file where he records his goals for the day.
 
+  - The log and goal file are exported to Dropbox, where it syncs with
+  - user's other Dropbox folders.
 
-{-- Here's how toweek.txt would look like:
- -
- -
- -
- -
- -
- -
+  - On user's computer, a bash script, which runs periodically, syncs
+  - the files from Dropbox to a local directory, which contains the
+  - Haskell script.
+
+  - The bash script starts on boot-up or wake-up and then runs every
+  - 5 min until a control flag is set to true. Effectively saying that
+  - sync has been succesful.
+
+  - When control flag is true, the bash script runs the Haskell script
+  - with the day's files and Haskell generates a master file $DAY.txt
+
+  - Possibly through another Haskell script, generate an API which allows
+  - two date arguments to be passed and generates some stats.
+
 --}
 
 {-- What's the end goal?
