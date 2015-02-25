@@ -106,12 +106,14 @@ main :: IO ()
 main = do
   logcontents <- readFile "data/tolog.txt"
   gtocontents <- readFile "data/goalday.txt"
-  let events = fmap parse (lines logcontents)
-      goals = lines gtocontents
-  tdate <- getCurrentTime
   count <- readFile "count.txt"
-  writeFile (count ++ " " ++ tdate ++ ".txt") (gento events goals)
-  writeFile "count.txt" (show ((read count :: Int) + 1))
+  tDate <- getDate
+  let events = fmap parse (lines logcontents)
+      repo = reportGen events
+  writeFile ("./data/Goals/Daily/" ++ tDate ++ ".txt") gtocontents
+  writeFile ("./data/RAW/" ++ count ++ "__" ++ tDate ++ ".txt") logcontents
+  writeFile ("./data/Reports/Daily/" ++ tDate ++ ".txt") repo
+  writeFile ("./data/count.txt") (show ((read count :: Int) + 1))
 
 getEvents :: String -> String -> IO [Event]
 getEvents f t = do
@@ -122,6 +124,10 @@ getEvents f t = do
       dfileNames = filter (\x -> (toNum x) `elem` [min..max]) fileNames
   allevents <- mapM readFile dfileNames
   return $ fmap (parse) (lines . concat $ allevents)
+
+getDate :: IO String
+getDate = (\(x,y,z) -> (show z) ++ "-" ++ (show y) ++ "-" ++ (show x))
+          getCurrentTime >>= return . toGregorian . utctDay
 
 toNum :: [Char] -> Int
 toNum s = read (takeWhile (isDigit) s) :: Int
@@ -162,6 +168,18 @@ allEtypes = [Study, Code, Read, Write, Hygiene, Exercise, Class,
 regen :: [Event] -> [(Int, Etype)]
 regen es = fmap (\x -> ((timeSpentOn x es), x)) allEtypes
 
+regenper :: [(Int, Etype)] -> [(Int, Etype, Float)]
+regenper es = let th = sum $ fmap (\(x,y) -> x) es
+              in fmap (\(x,y) -> (x,y,((fromIntegral x)*100 / th)) es
+
+repogen :: [(Int, Etype, Float)] -> String
+repogen es = concat $ fmap (\(x,y,z) ->
+             (show y) ++ " : " ++ (show x) ++
+             " minutes, or " ++ (show z) ++ " %\n") es
+
+reportGen :: [Event] -> String
+reportGen = repogen . regenper . regen
+
 isOfType :: Event -> Etype -> Bool
 x `isOfType` t = (etype x == t)
 
@@ -169,5 +187,3 @@ timeSpentOn :: Etype -> [Event] -> Int
 timeSpentOn x es = sum
                    $ map (\v -> getTimeSpentinMin (etimeBegin v) (etimeEnd v))
                    $ filter (\b - > b `isOfType` x) es
-
-gento :: [a] -> [b] -> String
