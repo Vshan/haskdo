@@ -58,21 +58,23 @@
 
 import System.IO
 import System.Directory
-import Control.Applicative
-import Data.Time
+import Data.List
 
 type Etime = (Int, Int)
 
 data Etype = Study | Code | Read | Write | Hygiene | Exercise | Class
              | ClassWork | Food | Zone | Sleep deriving Show
 
-data Event = Event { desc :: String, etime :: Etime, etype :: Etype }
+data Event = Event { desc :: String,
+                     etimeBegin :: Etime,
+                     etimeEnd :: Etime,
+                     etype :: Etype }
 
 main :: IO ()
 main = do
   logcontents <- readFile "tolog.txt"
   gtocontents <- readFile "goalday.txt"
-  let events = parse <$> (lines logcontents)
+  let events = fmap parse (lines logcontents)
       goals = lines gtocontents
   tdate <- getCurrentTime
   count <- readFile "count.txt"
