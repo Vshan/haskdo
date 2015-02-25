@@ -104,16 +104,16 @@ data Event = Event { desc :: String,
 
 main :: IO ()
 main = do
-  logcontents <- readFile "data/tolog.txt"
-  gtocontents <- readFile "data/goalday.txt"
-  count <- readFile "count.txt"
+  logcontents <- readFile "../data/tolog.txt"
+  gtocontents <- readFile "../data/goalday.txt"
+  count <- readFile "../data/count.txt"
   tDate <- getDate
   let events = fmap parse (lines logcontents)
       repo = reportGen events
-  writeFile ("./data/Goals/Daily/" ++ tDate ++ ".txt") gtocontents
-  writeFile ("./data/RAW/" ++ count ++ "__" ++ tDate ++ ".txt") logcontents
-  writeFile ("./data/Reports/Daily/" ++ tDate ++ ".txt") repo
-  writeFile ("./data/count.txt") (show ((read count :: Int) + 1))
+  writeFile ("../data/Goals/Daily/" ++ tDate ++ ".txt") gtocontents
+  writeFile ("../data/RAW/" ++ count ++ "__" ++ tDate ++ ".txt") logcontents
+  writeFile ("../data/Reports/Daily/" ++ tDate ++ ".txt") repo
+  writeFile ("../data/count.txt") (show ((read count :: Int) + 1))
 
 getEvents :: String -> String -> IO [Event]
 getEvents f t = do
