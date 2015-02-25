@@ -64,7 +64,7 @@ import Data.Time
 type Etime = (Int, Int)
 
 data Etype = Study | Code | Read | Write | Hygiene | Exercise | Class
-             | ClassWork | Food | Zone deriving Show
+             | ClassWork | Food | Zone | Sleep deriving Show
 
 data Event = Event { desc :: String, etime :: Etime, etype :: Etype }
 
@@ -107,5 +107,6 @@ getEtype x = case (reverse x) of
                               "b:" -> ClassWork
                               "f:" -> Food
                               "z:" -> Zone
+                              "y:" -> Sleep
 
 gento :: [a] -> [b] -> String
