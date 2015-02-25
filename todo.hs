@@ -59,6 +59,7 @@
 import System.IO
 import System.Directory
 import Data.List
+import Data.Time
 
 type Etime = (Int, Int)
 
@@ -72,8 +73,8 @@ data Event = Event { desc :: String,
 
 main :: IO ()
 main = do
-  logcontents <- readFile "tolog.txt"
-  gtocontents <- readFile "goalday.txt"
+  logcontents <- readFile "data/tolog.txt"
+  gtocontents <- readFile "data/goalday.txt"
   let events = fmap parse (lines logcontents)
       goals = lines gtocontents
   tdate <- getCurrentTime
@@ -84,31 +85,29 @@ main = do
 
 
 parse :: [Char] -> Event
-parse e@(t1:t2:t3:t4:_) = Event {desc = (getDesc e),
-                             etime = (getEtime $ t1 ++ t2 ++ t3 ++ t4),
-                             etype = (getEtype e)}
+parse e = Event {desc = (getDesc e),
+                 etimeBegin = (getEtime (take 4 e)),
+                 etimeEnd = (getEtime (take 4 $ drop 5 e)),
+                 etype = (getEtype e)}
 
 getDesc :: [Char] -> String
-getDesc x = case x of
-              (_:_:_:_:_:d) -> case (reverse d) of
-                                 (_:_:f) -> reverse f
+getDesc x =  reverse $ drop 3 $ reverse (drop 10 x)
 
 getEtime :: [Char] -> Etime
 getEtime (h1:h2:m1:m2) = (read (h1 ++ h2) :: Int, read (m1 ++ m2) :: Int)
 
 getEtype :: [Char] -> Etype
-getEtype x = case (reverse x) of
-               (x1:x2:_) -> case (x1 ++ x2) of
-                              "s:" -> Study
-                              "c:" -> Code
-                              "r:" -> Read
-                              "w:" -> Write
-                              "h:" -> Hygiene
-                              "e:" -> Exercise
-                              "g:" -> Class
-                              "b:" -> ClassWork
-                              "f:" -> Food
-                              "z:" -> Zone
-                              "y:" -> Sleep
+getEtype x = case (take 2 $ reverse x) of
+                  "s:" -> Study
+                  "c:" -> Code
+                  "r:" -> Read
+                  "w:" -> Write
+                  "h:" -> Hygiene
+                  "e:" -> Exercise
+                  "g:" -> Class
+                  "b:" -> ClassWork
+                  "f:" -> Food
+                  "z:" -> Zone
+                  "y:" -> Sleep
 
 gento :: [a] -> [b] -> String
