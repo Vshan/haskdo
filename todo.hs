@@ -94,7 +94,7 @@ getDesc :: [Char] -> String
 getDesc x =  reverse $ drop 3 $ reverse (drop 10 x)
 
 getEtime :: [Char] -> Etime
-getEtime (h1:h2:m1:m2) = (read (h1 ++ h2) :: Int, read (m1 ++ m2) :: Int)
+getEtime [h1, h2, m1, m2] = (read [h1,h2] :: Int, read [m1,m2] :: Int)
 
 getEtype :: [Char] -> Etype
 getEtype x = case (take 2 $ reverse x) of
@@ -119,6 +119,6 @@ x `isOfType` t = (etype x == t)
 timeSpentOn :: Etype -> [Event] -> Int
 timeSpentOn x es = sum
                    $ map (\v -> getTimeSpentinMin (etimeBegin v) (etimeEnd v))
-                   $ filter (\b - > x `isOfType` b) es
+                   $ filter (\b - > b `isOfType` x) es
 
 gento :: [a] -> [b] -> String
