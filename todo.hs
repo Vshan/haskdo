@@ -20,6 +20,36 @@
  0200 sleep
 --}
 
+{-- Directory Structure
+ - data/
+   -- Goals/
+      -- DailyGoals
+      -- WeeklyGoals
+      -- MonthlyGoals
+   -- RAW/
+      -- - Should be of format 1__23-12-2014.txt,
+                               2__24-12-2014.txt,
+                               .
+                               .
+                               .
+                               100__01-03-2015.txt
+   -- Reports/
+      -- - Same format as above
+      -- WeeklyReports
+      -- MonthlyReports
+--}
+
+{-- Reports Structure
+ - The report for $DATE in $NAME's life.
+ - Study: 340 minutes or 30% of total time.
+ - Code: 453 minutes or 43% of total time.
+   .
+   .
+   .
+   .
+ - Sleep: 2000 minutes or 20% of total time.
+--}
+
 {-- Here's how the functionality works:
 
   - The user logs his entire day in Google Keep on his phone.
@@ -60,6 +90,7 @@ import System.IO
 import System.Directory
 import Data.List
 import Data.Time
+import Data.Char
 
 type Etime = (Int, Int)
 
@@ -82,7 +113,18 @@ main = do
   writeFile (count ++ " " ++ tdate ++ ".txt") (gento events goals)
   writeFile "count.txt" (show ((read count :: Int) + 1))
 
+getEvents :: String -> String -> IO [Event]
+getEvents f t = do
+  dircon <- getDirectoryContents "./data/RAW"
+  let min = toNum f
+      max = toNum t
+      fileNames = init $ tail $ dircon
+      dfileNames = filter (\x -> (toNum x) `elem` [min..max]) fileNames
+  allevents <- mapM readFile dfileNames
+  return $ fmap (parse) (lines . concat $ allevents)
 
+toNum :: [Char] -> Int
+toNum s = read (takeWhile (isDigit) s) :: Int
 
 parse :: [Char] -> Event
 parse e = Event {desc = (getDesc e),
@@ -94,7 +136,7 @@ getDesc :: [Char] -> String
 getDesc x =  reverse $ drop 3 $ reverse (drop 10 x)
 
 getEtime :: [Char] -> Etime
-getEtime [h1, h2, m1, m2] = (read [h1,h2] :: Int, read [m1,m2] :: Int)
+getEtime [h1, h2, m1, m2] = (read [h1, h2] :: Int, read [m1, m2] :: Int)
 
 getEtype :: [Char] -> Etype
 getEtype x = case (take 2 $ reverse x) of
@@ -112,6 +154,13 @@ getEtype x = case (take 2 $ reverse x) of
 
 getTimeSpentinMin :: Etime -> Etime -> Int
 getTimeSpentinMin (x1, y1) (x2, y2) = (x2 - x1)*60 + (y2 - y1)
+
+allEtypes :: [Etype]
+allEtypes = [Study, Code, Read, Write, Hygiene, Exercise, Class,
+             ClassWork, Food, Zone, Sleep]
+
+regen :: [Event] -> [(Int, Etype)]
+regen es = fmap (\x -> ((timeSpentOn x es), x)) allEtypes
 
 isOfType :: Event -> Etype -> Bool
 x `isOfType` t = (etype x == t)
