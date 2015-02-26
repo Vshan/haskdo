@@ -1,0 +1,12 @@
+#!/bin/bash
+
+./save_page_as "https://keep.google.com/#home" --destination "./tro.html" > /dev/null
+ruby parse_html.rb tro.html
+ruby convert.rb tolog.txt
+mv temp.txt ../data/tolog.txt
+runhaskell todo.hs
+rm -r tro_files
+rm tro.html
+rm tolog.txt
+google-chrome "../data/Reports/Daily/26-2-2015.txt"
+exit
