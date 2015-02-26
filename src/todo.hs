@@ -97,7 +97,7 @@ import Numeric
 type Etime = (Int, Int)
 
 data Etype = Study | Code | Read | Write | Hygiene | Exercise | Class
-             | ClassWork | Food | Zone | Sleep deriving (Show, Eq)
+             | ClassWork | Food | Fun | Sleep deriving (Show, Eq)
 
 data Event = Event { desc :: String,
                      etimeBegin :: Etime,
@@ -175,7 +175,7 @@ getEtype x = case (take 2 $ reverse x) of
                   "g:" -> Class
                   "b:" -> ClassWork
                   "f:" -> Food
-                  "z:" -> Zone
+                  "z:" -> Fun
                   "y:" -> Sleep
 
 fmtFltN fn nod = showFFloat (Just nod) fn ""
@@ -186,7 +186,7 @@ getTimeSpentinMin (x1, y1) (x2, y2) = (x2 - x1)*60 + (y2 - y1)
 
 allEtypes :: [Etype]
 allEtypes = [Study, Code, Read, Write, Hygiene, Exercise, Class,
-             ClassWork, Food, Zone, Sleep]
+             ClassWork, Food, Fun, Sleep]
 
 regen :: [Event] -> [(Int, Etype)]
 regen es = fmap (\x -> ((timeSpentOn x es), x)) allEtypes
