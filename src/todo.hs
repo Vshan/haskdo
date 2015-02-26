@@ -104,6 +104,15 @@ data Event = Event { desc :: String,
 
 main :: IO ()
 main = do
+  args <- getArgs
+  delegate args
+
+delegate :: [String] -> IO ()
+delegate [] = dailyScript
+delegate [f, t] = genRepoFromTo f t
+
+dailyScript :: IO ()
+dailyScript = do
   logcontents <- readFile "../data/tolog.txt"
   gtocontents <- readFile "../data/goalday.txt"
   count <- readFile "../data/count.txt"
@@ -118,12 +127,18 @@ main = do
 getEvents :: String -> String -> IO [Event]
 getEvents f t = do
   dircon <- getDirectoryContents "./data/RAW"
-  let min = toNum f
-      max = toNum t
+  let min = toNum $ concat $ filter (isInfixOf f) dircon
+      max = toNum $ concat $ filter (isInfixOf t) dircon
       fileNames = init $ tail $ dircon
       dfileNames = filter (\x -> (toNum x) `elem` [min..max]) fileNames
   allevents <- mapM readFile dfileNames
   return $ fmap (parse) (lines . concat $ allevents)
+
+genRepoFromTo :: String -> String -> IO ()
+genRepoFromTo f t = do
+  events <- getEvents f t
+  let report = reportGen events
+  writeFile ("../data/Reports/From " ++ f ++ " to " ++ t ++ ".txt") report 
 
 getDate :: IO String
 getDate = (\(x,y,z) -> (show z) ++ "-" ++ (show y) ++ "-" ++ (show x))
@@ -175,7 +190,8 @@ regenper es = let th = sum $ fmap (\(x,y) -> x) es
 repogen :: [(Int, Etype, Float)] -> String
 repogen es = concat $ fmap (\(x,y,z) ->
              (show y) ++ " : " ++ (show x) ++
-             " minutes, or " ++ (show z) ++ " %\n") es
+             " minutes, or " (show ((fromIntegral x) / 60)) ++
+             "hours, or " ++ (show z) ++ " %\n") es
 
 reportGen :: [Event] -> String
 reportGen = repogen . regenper . regen
