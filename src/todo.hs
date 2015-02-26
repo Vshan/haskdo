@@ -88,9 +88,11 @@
 
 import System.IO
 import System.Directory
+import System.Environment
 import Data.List
 import Data.Time
 import Data.Char
+import Numeric
 
 type Etime = (Int, Int)
 
@@ -114,7 +116,7 @@ delegate [f, t] = genRepoFromTo f t
 dailyScript :: IO ()
 dailyScript = do
   logcontents <- readFile "../data/tolog.txt"
-  gtocontents <- readFile "../data/goalday.txt"
+  gtocontents <- readFile "../data/goaltoday.txt"
   count <- readFile "../data/count.txt"
   tDate <- getDate
   let events = fmap parse (lines logcontents)
@@ -138,11 +140,14 @@ genRepoFromTo :: String -> String -> IO ()
 genRepoFromTo f t = do
   events <- getEvents f t
   let report = reportGen events
-  writeFile ("../data/Reports/From " ++ f ++ " to " ++ t ++ ".txt") report 
+  writeFile ("../data/Reports/From " ++ f ++ " to " ++ t ++ ".txt") report
 
 getDate :: IO String
-getDate = (\(x,y,z) -> (show z) ++ "-" ++ (show y) ++ "-" ++ (show x))
-          getCurrentTime >>= return . toGregorian . utctDay
+getDate = date >>= (\(x,y,z) ->
+          return $ (show z) ++ "-" ++ (show y) ++ "-" ++ (show x))
+
+date :: IO (Integer, Int, Int)
+date = getCurrentTime >>= return . toGregorian . utctDay
 
 toNum :: [Char] -> Int
 toNum s = read (takeWhile (isDigit) s) :: Int
@@ -173,6 +178,9 @@ getEtype x = case (take 2 $ reverse x) of
                   "z:" -> Zone
                   "y:" -> Sleep
 
+fmtFltN fn nod = showFFloat (Just nod) fn ""
+disFl f = fmtFltN f 2
+
 getTimeSpentinMin :: Etime -> Etime -> Int
 getTimeSpentinMin (x1, y1) (x2, y2) = (x2 - x1)*60 + (y2 - y1)
 
@@ -185,13 +193,14 @@ regen es = fmap (\x -> ((timeSpentOn x es), x)) allEtypes
 
 regenper :: [(Int, Etype)] -> [(Int, Etype, Float)]
 regenper es = let th = sum $ fmap (\(x,y) -> x) es
-              in fmap (\(x,y) -> (x,y,((fromIntegral x)*100 / th)) es
+              in fmap (\(x,y) ->
+              (x,y,((fromIntegral x)*100 / (fromIntegral th)))) es
 
 repogen :: [(Int, Etype, Float)] -> String
 repogen es = concat $ fmap (\(x,y,z) ->
              (show y) ++ " : " ++ (show x) ++
-             " minutes, or " (show ((fromIntegral x) / 60)) ++
-             "hours, or " ++ (show z) ++ " %\n") es
+             " minutes, or " ++ (disFl ((fromIntegral x) / 60)) ++
+             " hours, or " ++ (disFl z) ++ "%\n") es
 
 reportGen :: [Event] -> String
 reportGen = repogen . regenper . regen
@@ -202,4 +211,4 @@ x `isOfType` t = (etype x == t)
 timeSpentOn :: Etype -> [Event] -> Int
 timeSpentOn x es = sum
                    $ map (\v -> getTimeSpentinMin (etimeBegin v) (etimeEnd v))
-                   $ filter (\b - > b `isOfType` x) es
+                   $ filter (\b -> b `isOfType` x) es
