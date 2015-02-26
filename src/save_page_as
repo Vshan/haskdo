@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# https://github.com/abiyani/automate-save-page-as
+# All credit for this bash script goes to github.com/abiyani
+# Thank you, abiyani
+
 set -e
 set -u
 set -o pipefail
