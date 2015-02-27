@@ -8,5 +8,5 @@ runhaskell todo.hs
 rm -r tro_files
 rm tro.html
 rm tolog.txt
-google-chrome "../data/Reports/Daily"
+google-chrome "../data/Reports/Daily/26-2-2015.txt"
 exit
