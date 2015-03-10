@@ -9,7 +9,7 @@
 {--
  - Here's how tolog.txt would look like (an example day):
  0730 chilling :z
- 0740 crap :h
+ 0740 bathe :h
  0750 leave for class :e
  0800 class begin :c
  0850 break :z
