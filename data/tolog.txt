@@ -1,8 +1,1 @@
-0200 sleep :y
-0730 chilling :z
-0740 crap :h
-0750 leave for class :e
-0800 class begin :c
-0850 break :z
-0900 next class :c
-0200 sleep
+
