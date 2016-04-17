@@ -1,0 +1,11 @@
+Study : 0 minutes, or 0.00 hours, or 0.00%
+Code : 300 minutes, or 5.00 hours, or 21.74%
+Read : 60 minutes, or 1.00 hours, or 4.35%
+Write : 240 minutes, or 4.00 hours, or 17.39%
+Hygiene : 0 minutes, or 0.00 hours, or 0.00%
+Exercise : 90 minutes, or 1.50 hours, or 6.52%
+Class : 120 minutes, or 2.00 hours, or 8.70%
+ClassWork : 0 minutes, or 0.00 hours, or 0.00%
+Food : 120 minutes, or 2.00 hours, or 8.70%
+Fun : 90 minutes, or 1.50 hours, or 6.52%
+Sleep : 360 minutes, or 6.00 hours, or 26.09%

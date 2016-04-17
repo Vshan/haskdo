@@ -1,19 +1,21 @@
+# USAGE: python webcrawl.py <username> <pwd>
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import time
+import sys
 
 browser = webdriver.Firefox()
 browser.get("https://keep.google.com/") 
 time.sleep(5)
 username = browser.find_element_by_id("Email")
 
-username.send_keys("vinaybhat001")
+username.send_keys(sys.argv[1])
 login_attempt_1 = browser.find_element_by_xpath("//*[@type='submit']")
 login_attempt_1.submit()
 
 time.sleep(5)
 password = browser.find_element_by_id("Passwd")
-password.send_keys("ashandpikaftw14")
+password.send_keys(sys.argv[2])
 login_attempt_2 = browser.find_element_by_xpath("//*[@type='submit']")
 login_attempt_2.submit()
 #posts = browser.find_elements_by_class_name("fk-display-block")

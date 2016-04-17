@@ -1,6 +1,7 @@
-0730 chilling :z
-0740 crap :h
-0750 leave for class :e
-0800 class begin :c
-0850 break :z
-0900 next class :c
+0200 0730 sleep :y
+0730 0740 chilling :z
+0740 0750 crap :h
+0750 0800 leave for class :e
+0800 0850 class begin :c
+0850 0900 break :z
+0900 0200 next class :c

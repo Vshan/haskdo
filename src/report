@@ -1,12 +1,9 @@
 #!/bin/bash
-
-./save_page_as "https://keep.google.com/#home" --destination "./tro.html" > /dev/null
-ruby parse_html.rb tro.html
-ruby convert.rb tolog.txt
+#usage: ./report <username> <pwd>
+#./save_page_as "https://keep.google.com/#home" --destination "./tro.html" > /dev/null
+python webcrawl.py $1 $2
+ruby convert.rb ../data/tolog.txt
 mv temp.txt ../data/tolog.txt
 runhaskell todo.hs
-rm -r tro_files
-rm tro.html
-rm tolog.txt
 google-chrome "../data/Reports/Daily"
 exit

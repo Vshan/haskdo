@@ -182,7 +182,8 @@ fmtFltN fn nod = showFFloat (Just nod) fn ""
 disFl f = fmtFltN f 2
 
 getTimeSpentinMin :: Etime -> Etime -> Int
-getTimeSpentinMin (x1, y1) (x2, y2) = (x2 - x1)*60 + (y2 - y1)
+getTimeSpentinMin (x1, y1) (x2, y2) = if x2 >= x1 then (x2 - x1)*60 + (y2 - y1)
+                                      else (23 - x1)*60 + (60 - y1) + x2*60 + y2
 
 allEtypes :: [Etype]
 allEtypes = [Study, Code, Read, Write, Hygiene, Exercise, Class,
