@@ -1,0 +1,11 @@
+0300 0800 sleep :y
+0800 0900 jog :e
+0900 1000 class :g
+1000 1030 walk back :e
+1030 1200 chillout :z
+1200 1300 read :r
+1300 1400 class :g
+1400 1900 code :c
+1900 2000 dinner :f
+2000 2230 write novel :w
+2230 0100 study :s

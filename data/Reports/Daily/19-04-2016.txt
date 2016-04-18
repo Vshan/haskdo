@@ -1,0 +1,11 @@
+Study : 0 minutes, or 0.00 hours, or NaN%
+Code : 0 minutes, or 0.00 hours, or NaN%
+Read : 0 minutes, or 0.00 hours, or NaN%
+Write : 0 minutes, or 0.00 hours, or NaN%
+Hygiene : 0 minutes, or 0.00 hours, or NaN%
+Exercise : 0 minutes, or 0.00 hours, or NaN%
+Class : 0 minutes, or 0.00 hours, or NaN%
+ClassWork : 0 minutes, or 0.00 hours, or NaN%
+Food : 0 minutes, or 0.00 hours, or NaN%
+Fun : 0 minutes, or 0.00 hours, or NaN%
+Sleep : 0 minutes, or 0.00 hours, or NaN%

@@ -5,5 +5,5 @@ python webcrawl.py $1 $2
 ruby convert.rb ../data/tolog.txt
 mv temp.txt ../data/tolog.txt
 runhaskell todo.hs
-google-chrome "../data/Reports/Daily"
+python plot.py
 exit

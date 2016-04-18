@@ -1,0 +1,4 @@
+0100 0500 sleep :y
+0500 0900 read :r
+0900 1900 study :s
+1900 0100 dinner :f

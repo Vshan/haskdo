@@ -1,8 +1,15 @@
 # USAGE: python webcrawl.py <username> <pwd>
+
+from pyvirtualdisplay import Display
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import time
 import sys
+
+
+#display = Display(visible=0, size=(800, 600))
+#display.start()
+
 
 browser = webdriver.Firefox()
 browser.get("https://keep.google.com/") 
@@ -40,7 +47,7 @@ for line in logLines:
     logfile.write(line)
     logfile.write("\n")
 
-
+browser.quit()
 # notranslate IZ65Hb-YPqjbf r4nke-YPqjbf
 # notranslate IZ65Hb-YPqjbf h1U9Be-YPqjbf rTEl-SX9D7d-Y5a8lc
 # IZ65Hb-TBnied HLvlvd-h1U9Be

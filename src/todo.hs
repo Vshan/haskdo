@@ -121,10 +121,12 @@ dailyScript = do
   tDate <- getDate
   let events = fmap parse (lines logcontents)
       repo = reportGen events
+      timesString = concat (fmap (\(x, _) -> (show x) ++ ",") (regen events))
   writeFile ("../data/Goals/Daily/" ++ tDate ++ ".txt") gtocontents
   writeFile ("../data/RAW/" ++ count ++ "__" ++ tDate ++ ".txt") logcontents
   writeFile ("../data/Reports/Daily/" ++ tDate ++ ".txt") repo
   writeFile ("../data/count.txt") (show ((read count :: Int) + 1))
+  writeFile ("../data/" ++ tDate ++ "plotdata.txt") timesString
 
 getEvents :: String -> String -> IO [Event]
 getEvents f t = do
@@ -144,7 +146,7 @@ genRepoFromTo f t = do
 
 getDate :: IO String
 getDate = date >>= (\(x,y,z) ->
-          return $ (show z) ++ "-" ++ (show y) ++ "-" ++ (show x))
+          return $ (show (z+1)) ++ "-" ++ (if y > 9 then (show y) else "0" ++ (show y)) ++ "-" ++ (show x))
 
 date :: IO (Integer, Int, Int)
 date = getCurrentTime >>= return . toGregorian . utctDay
